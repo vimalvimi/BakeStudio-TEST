@@ -1,10 +1,10 @@
-package roxybakestudio.bakestudio.activity;
+package roxybakestudio.bakestudio.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -15,11 +15,10 @@ import roxybakestudio.bakestudio.R;
 import roxybakestudio.bakestudio.adapter.RecipeAdapter;
 import roxybakestudio.bakestudio.model.Recipe;
 import roxybakestudio.bakestudio.rest.RestManager;
+import timber.log.Timber;
 
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final String TAG = MainActivity.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
     private RecipeAdapter mRecipeAdapter;
@@ -47,19 +46,23 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 } else {
-                    Log.d(TAG, "onResponse: RESPONSE CODE ERROR" + response.code());
+                    Timber.d("RESPONSE CODE ERROR " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                Timber.d(t.getMessage());
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void configViews() {
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_items);
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+
         mRecyclerView.setLayoutManager(layoutManager);
         mRecipeAdapter = new RecipeAdapter();
         mRecyclerView.setAdapter(mRecipeAdapter);

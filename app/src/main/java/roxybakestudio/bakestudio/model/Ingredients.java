@@ -1,9 +1,14 @@
 package roxybakestudio.bakestudio.model;
 
+import com.google.gson.annotations.Expose;
+
 public class Ingredients {
 
+    @Expose
     private double quantity;
+    @Expose
     private String measure;
+    @Expose
     private String ingredient;
 
     public Ingredients(double quantity, String measure, String ingredient) {

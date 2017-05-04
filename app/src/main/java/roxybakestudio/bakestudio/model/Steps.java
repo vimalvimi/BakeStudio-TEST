@@ -1,11 +1,18 @@
 package roxybakestudio.bakestudio.model;
 
+import com.google.gson.annotations.Expose;
+
 public class Steps {
 
+    @Expose
     private int stepsId;
+    @Expose
     private String shortDescription;
+    @Expose
     private String description;
+    @Expose
     private String url;
+    @Expose
     private String thumbnail;
 
     public Steps(int id, String shortDescription, String description,
