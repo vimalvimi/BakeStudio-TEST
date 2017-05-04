@@ -4,15 +4,17 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.TextView;
+import android.util.Log;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import roxybakestudio.bakestudio.R;
 import roxybakestudio.bakestudio.adapter.RecipeAdapter;
-import roxybakestudio.bakestudio.model.Ingredients;
 import roxybakestudio.bakestudio.model.Recipe;
-import roxybakestudio.bakestudio.model.Steps;
+import roxybakestudio.bakestudio.rest.RestManager;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -21,50 +23,45 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private RecipeAdapter mRecipeAdapter;
-    TextView mTextView;
-    private ArrayList<Recipe> mData;
+    private RestManager mRestManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextView = (TextView) findViewById(R.id.test_text);
+        configViews();
 
-        //List
-        mData = new ArrayList<>();
+        mRestManager = new RestManager();
+        Call<List<Recipe>> listCall = mRestManager.getRecipeService().getAllRecipes();
+        listCall.enqueue(new Callback<List<Recipe>>() {
+            @Override
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_items);
+                if (response.isSuccessful()) {
+                    List<Recipe> recipes = response.body();
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                    for (int i = 0; i < recipes.size(); i++) {
+                        Recipe recipe = recipes.get(i);
+                        mRecipeAdapter.addRecipe(recipe);
+                    }
 
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecipeAdapter = new RecipeAdapter(mData, MainActivity.this);
-        mRecyclerView.setAdapter(mRecipeAdapter);
+                } else {
+                    Log.d(TAG, "onResponse: RESPONSE CODE ERROR" + response.code());
+                }
+            }
 
+            @Override
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+            }
+        });
     }
 
-    private void setData() {
-
-        mData.add(new Recipe(
-                1,
-                "Pie0",
-                new Ingredients(12, "Cup", "Salt"),
-                new Steps(0, "Intro", "New Disc", "www.example.com", "nullhu"),
-                23));
-        mData.add(new Recipe(
-                2,
-                "Pie1",
-                new Ingredients(32, "Cup", "Salt"),
-                new Steps(0, "Intro", "New Disc", "www.example.com", "nullhu"),
-                23));
-        mData.add(new Recipe(
-                2,
-                "Pie2",
-                new Ingredients(213, "Cup", "Salt"),
-                new Steps(0, "Intro", "New Disc", "www.example.com", "nullhu"),
-                22));
-
-        mRecipeAdapter.notifyDataSetChanged();
+    private void configViews() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_items);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecipeAdapter = new RecipeAdapter();
+        mRecyclerView.setAdapter(mRecipeAdapter);
     }
 }

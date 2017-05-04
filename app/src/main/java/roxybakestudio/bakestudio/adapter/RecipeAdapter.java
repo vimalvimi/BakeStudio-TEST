@@ -1,12 +1,12 @@
 package roxybakestudio.bakestudio.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import roxybakestudio.bakestudio.R;
@@ -14,22 +14,20 @@ import roxybakestudio.bakestudio.model.Recipe;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder> {
 
-    private List<Recipe> mRecipes;
-    Context mContext;
+    private List<Recipe> mRecipes = new ArrayList<>();
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView listName;
+        TextView listName, servings;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            listName = (TextView) itemView.findViewById(R.id.recipe_name);
+            listName = (TextView) itemView.findViewById(R.id.main_recipe_name);
+            servings = (TextView) itemView.findViewById(R.id.main_servings);
         }
     }
 
-    public RecipeAdapter(List<Recipe> recipes, Context context) {
-        mRecipes = recipes;
-        mContext = context;
+    public RecipeAdapter() {
     }
 
     @Override
@@ -44,10 +42,17 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Recipe recipe = mRecipes.get(position);
         holder.listName.setText(recipe.getName());
+        holder.servings.setText(String.valueOf(recipe.getServings()));
     }
 
     @Override
     public int getItemCount() {
         return mRecipes.size();
     }
+
+    public void addRecipe(Recipe recipe) {
+        mRecipes.add(recipe);
+        notifyDataSetChanged();
+    }
+
 }

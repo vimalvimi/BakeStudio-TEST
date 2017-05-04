@@ -17,7 +17,7 @@ public class Steps {
         this.thumbnail = thumbnail;
     }
 
-    public int getId() {
+    public int getStepsId() {
         return stepsId;
     }
 
