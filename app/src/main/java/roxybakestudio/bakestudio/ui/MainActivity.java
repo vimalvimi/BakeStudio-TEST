@@ -1,70 +1,40 @@
 package roxybakestudio.bakestudio.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import roxybakestudio.bakestudio.R;
-import roxybakestudio.bakestudio.adapter.RecipeAdapter;
-import roxybakestudio.bakestudio.model.Recipe;
-import roxybakestudio.bakestudio.rest.RestManager;
-import timber.log.Timber;
 
+public class MainActivity extends AppCompatActivity{
 
-public class MainActivity extends AppCompatActivity {
-
-    private RecyclerView mRecyclerView;
-    private RecipeAdapter mRecipeAdapter;
-    private RestManager mRestManager;
+    boolean mDualPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        configViews();
+        //Check if the layout is dual
+        if (findViewById(R.id.details_fragment) != null) {
+            mDualPane = true;
 
-        mRestManager = new RestManager();
-        Call<List<Recipe>> listCall = mRestManager.getRecipeService().getAllRecipes();
-        listCall.enqueue(new Callback<List<Recipe>>() {
-            @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+            FragmentManager manager = getSupportFragmentManager();
 
-                if (response.isSuccessful()) {
-                    List<Recipe> recipes = response.body();
+            RecipeFragment recipeFragment = new RecipeFragment();
 
-                    for (int i = 0; i < recipes.size(); i++) {
-                        Recipe recipe = recipes.get(i);
-                        mRecipeAdapter.addRecipe(recipe);
-                    }
+            recipeFragment.setDualPane(true);
 
-                } else {
-                    Timber.d("RESPONSE CODE ERROR " + response.code());
-                }
-            }
+            manager.beginTransaction()
+                    .add(R.id.recipe_fragment, recipeFragment)
+                    .commit();
 
-            @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                Timber.d(t.getMessage());
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void configViews() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_items);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecipeAdapter = new RecipeAdapter();
-        mRecyclerView.setAdapter(mRecipeAdapter);
+            DetailsFragment detailsFragment = new DetailsFragment();
+            manager.beginTransaction()
+                    .add(R.id.details_fragment, detailsFragment)
+                    .commit();
+        } else {
+            mDualPane = false;
+        }
     }
 }

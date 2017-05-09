@@ -2,7 +2,9 @@ package roxybakestudio.bakestudio.model;
 
 import com.google.gson.annotations.Expose;
 
-public class Ingredients {
+import java.io.Serializable;
+
+public class Ingredients implements Serializable {
 
     @Expose
     private double quantity;

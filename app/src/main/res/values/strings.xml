@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Bake Studio</string>
+    <string name="title_activity_details">DetailsActivity</string>
+    <string name="recipe_background_image">recipe background image</string>
+    <string name="header_image">Header Image</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="plus_bullet">Plus Bullet</string>
+    <string name="steps">Steps</string>
+    <string name="main_activity_background_image">Main activity background image</string>
+    <string name="scrim">Scrim</string>
 </resources>

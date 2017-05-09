@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="roxybakestudio.bakestudio.ui.MainActivity">
 
-    <include layout="@layout/fragment_list"/>
-</android.support.constraint.ConstraintLayout>
+    <fragment
+        class="roxybakestudio.bakestudio.ui.RecipeFragment"
+        android:id="@+id/recipe_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</FrameLayout>

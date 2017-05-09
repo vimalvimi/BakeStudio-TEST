@@ -2,12 +2,14 @@ package roxybakestudio.bakestudio.model;
 
 import com.google.gson.annotations.Expose;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Recipe {
+public class Recipe implements Serializable {
 
     @Expose
-    private int recipeId;
+    private int id;
     @Expose
     private String name;
     @Expose
@@ -17,9 +19,15 @@ public class Recipe {
     @Expose
     private int servings;
 
-    public Recipe(int recipeId, String name, List<Ingredients> ingredients,
+    public Recipe(int id, String name, int servings) {
+        this.id = id;
+        this.name = name;
+        this.servings = servings;
+    }
+
+    public Recipe(int id, String name, List<Ingredients> ingredients,
                   List<Steps> steps, int servings) {
-        this.recipeId = recipeId;
+        this.id = id;
         this.name = name;
         this.ingredients = ingredients;
         this.steps = steps;
@@ -27,7 +35,7 @@ public class Recipe {
     }
 
     public int getRecipeId() {
-        return recipeId;
+        return id;
     }
 
     public String getName() {

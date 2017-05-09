@@ -2,30 +2,32 @@ package roxybakestudio.bakestudio.model;
 
 import com.google.gson.annotations.Expose;
 
-public class Steps {
+import java.io.Serializable;
+
+public class Steps implements Serializable {
 
     @Expose
-    private int stepsId;
+    private int id;
     @Expose
     private String shortDescription;
     @Expose
     private String description;
     @Expose
-    private String url;
+    private String videoURL;
     @Expose
-    private String thumbnail;
+    private String thumbnailURL;
 
     public Steps(int id, String shortDescription, String description,
-                 String url, String thumbnail) {
-        this.stepsId = id;
+                 String videoURL, String thumbnailURL) {
+        this.id = id;
         this.shortDescription = shortDescription;
         this.description = description;
-        this.url = url;
-        this.thumbnail = thumbnail;
+        this.videoURL = videoURL;
+        this.thumbnailURL = thumbnailURL;
     }
 
     public int getStepsId() {
-        return stepsId;
+        return id;
     }
 
     public String getShortDiscription() {
@@ -37,10 +39,10 @@ public class Steps {
     }
 
     public String getUrl() {
-        return url;
+        return videoURL;
     }
 
     public String getThumbnail() {
-        return thumbnail;
+        return thumbnailURL;
     }
 }
